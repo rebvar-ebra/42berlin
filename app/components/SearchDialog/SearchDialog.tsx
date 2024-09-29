@@ -1,42 +1,35 @@
 "use client";
-import React, { useState } from "react";
 
+import { commandIcon } from "@/app/utils/Icons";
+import { Button } from "@/components/ui/button";
+import { Command, CommandInput } from "@/components/ui/command";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 function SearchDialog() {
-  const [query, setQuery] = useState(""); // State to capture search input
-
-  // Function to toggle the dialog visibility
-
-
   return (
-    <div className="relative">
+    <div className="search-btn">
+      <Dialog modal={false}>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            className="border inline-flex items-center justify-center text-sm font-medium hover:dark:bg-[#131313] hover:bg-slate-100  ease-in-out duration-200"
+          >
+            <p className="text-sm text-muted-foreground">Search Here...</p>
+            <div className="command dark:bg-[#262626] bg-slate-200  py-[2px] pl-[5px] pr-[7px] rounded-sm ml-[10rem] flex items-center gap-2">
+              {commandIcon}
+              <span className="text-[9px]">F</span>
+            </div>
+          </Button>
+        </DialogTrigger>
 
-      {/* Search dialog */}
-
-        <div className="mt-4 p-4 border border-gray-300 rounded-md shadow-lg">
-          {/* Search input */}
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type to search..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-          />
-
-          {/* Display the text entered */}
-          <div className="mt-2 text-sm text-gray-600">
-            You are searching for: <span className="font-medium">{query}</span>
-          </div>
-
-          {/* Footer with close button */}
-          <div className="text-right mt-6">
-            <button
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      
+        <DialogContent className="p-0">
+          <Command className=" rounded-lg border shadow-md">
+            <CommandInput placeholder="Search the City" />
+            <ul className="px-3 py-2">
+              <p className="p-2 text-sm text-muted-foreground">Suggestions</p>
+            </ul>
+          </Command>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

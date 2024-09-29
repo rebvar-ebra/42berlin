@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import "./globals.css";
+import { GlobalContextProvider } from "../app/context/globalContext"; // Import the context provider
 
+// Define local fonts
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -35,7 +37,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          {/* Wrap with GlobalContextProvider */}
+          <GlobalContextProvider>
+            {children}
+          </GlobalContextProvider>
         </ThemeProvider>
       </body>
     </html>
