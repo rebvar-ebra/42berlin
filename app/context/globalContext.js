@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -10,9 +11,9 @@ const GlobalContextUpdate = createContext();
 export const GlobalContextProvider = ({ children }) => {
   const [forecast, setForecast] = useState({}); // Use setForecast for updating forecast state
 
-  const fetchForecast = async () => {
+  const fetchForecast = async (lat = 52.52, lon = 13.405) => {
     try {
-      const res = await axios.get("api/weather");
+      const res = await axios.get(`/api/weather?lat=${lat}&lon=${lon}`);
       console.log("res:", res.data);
       setForecast(res.data); // Set the forecast data
     } catch (error) {
@@ -21,12 +22,14 @@ export const GlobalContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchForecast();
+    fetchForecast(); // Call with default latitude and longitude
   }, []);
 
   return (
-    <GlobalContext.Provider >
-      <GlobalContextUpdate.Provider>{children}</GlobalContextUpdate.Provider>
+    <GlobalContext.Provider value={forecast}>
+      <GlobalContextUpdate.Provider value={setForecast}>
+        {children}
+      </GlobalContextUpdate.Provider>
     </GlobalContext.Provider>
   );
 };

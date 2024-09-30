@@ -4,12 +4,9 @@ import { github } from "../utils/Icons";
 import { useRouter } from "next/navigation";
 import { ThemeDropDown } from "./ThemDropDown/ThemeDropDown";
 import SearchDialog from "./SearchDialog/SearchDialog";
-import { useGlobalContext } from "../context/globalContext"; // Use context
 
 function Navbar() {
   const router = useRouter();
-  const state = useGlobalContext(); // Directly use the context value
-  console.log("Global State:", state);
 
   return (
     <div className="w-full py-4 flex items-center justify-between">
