@@ -1,29 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-"use client";
-
+"use client"
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 
-// Create contexts
 const GlobalContext = createContext();
 const GlobalContextUpdate = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
-  const [forecast, setForecast] = useState({}); // Use setForecast for updating forecast state
+  const [forecast, setForecast] = useState({}); // Initialize forecast as an empty object
 
-  const fetchForecast = async (lat = 52.52, lon = 13.405) => {
+  const fetchForecast = async () => {
     try {
-      const res = await axios.get(`/api/weather?lat=${lat}&lon=${lon}`);
-      console.log("res:", res.data);
-      setForecast(res.data); // Set the forecast data
+      // Set latitude and longitude for Berlin as default values
+      const params = { lat: 52.52, lon: 13.405 };
+
+      const res = await axios.get("/api/weather", { params });
+      console.log("API response in context:", res.data);
+
+      setForecast(res.data);
     } catch (error) {
       console.log("Error fetching data:", error.message);
     }
   };
 
   useEffect(() => {
-    fetchForecast(); // Call with default latitude and longitude
+    fetchForecast();
   }, []);
+
+  console.log("Forecast data in context:", forecast); // Add this log to check context state
 
   return (
     <GlobalContext.Provider value={forecast}>
@@ -34,6 +37,5 @@ export const GlobalContextProvider = ({ children }) => {
   );
 };
 
-// Custom hooks to use the context values
 export const useGlobalContext = () => useContext(GlobalContext);
 export const useGlobalContextUpdate = () => useContext(GlobalContextUpdate);
