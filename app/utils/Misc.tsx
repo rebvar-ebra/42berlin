@@ -26,19 +26,15 @@ export const formatNumber = (num: number, decimals: number = 1) => {
 };
 
 interface AirQualityIndex {
-  rating: number;
+  rating: number; // This represents the AQI value
   description: string;
 }
 
 export const airQualityIndexText: AirQualityIndex[] = [
-  { rating: 10, description: "excellent" },
-  { rating: 20, description: "good" },
-  { rating: 30, description: "satisfactory" },
-  { rating: 40, description: "fair" },
-  { rating: 50, description: "moderate" },
-  { rating: 60, description: "moderate" },
-  { rating: 70, description: "poor" },
-  { rating: 80, description: "poor" },
-  { rating: 90, description: "very poor" },
-  { rating: 100, description: "very poor" },
+  { rating: 0, description: "Good" },
+  { rating: 1, description: "Moderate" },
+  { rating: 2, description: "Unhealthy for Sensitive Groups" },
+  { rating: 3, description: "Unhealthy" },
+  { rating: 4, description: "Very Unhealthy" },
+  { rating: 5, description: "Hazardous" },
 ];

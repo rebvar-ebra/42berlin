@@ -16,11 +16,12 @@ import moment from "moment";
 
 export default function Temperature() {
   const forecast = useGlobalContext(); // Get the forecast data from context
-  console.log("Forecast in Temperature Component:", forecast); // Debug log
+
+  // Log the forecast data for debugging
+  console.log("Forecast data:", forecast);
 
   // Check for forecast data
   if (!forecast || Object.keys(forecast).length === 0) {
-    console.warn("Forecast data is undefined or empty. Loading skeleton...");
     return (
       <div className="flex items-center space-x-4">
         <Skeleton className="h-12 w-12 rounded-full" />
@@ -63,6 +64,7 @@ export default function Temperature() {
 
   // Memoize the weather icon calculation
   const icon = useMemo(() => {
+    if (!weather || weather.length === 0) return clearSky; // Default icon
     const { main: weatherMain } = weather[0];
     switch (weatherMain) {
       case "Drizzle":

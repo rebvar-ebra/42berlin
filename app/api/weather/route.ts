@@ -21,9 +21,9 @@ export async function GET(req: NextRequest) {
 
     // Construct the OpenWeather API URL
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-    const { data } = await axios.get(url);
+    const res = await axios.get(url);
 
-    return NextResponse.json(data);
+    return NextResponse.json(res.data);
   } catch (error) {
     console.error("Error fetching forecast data", error);
 

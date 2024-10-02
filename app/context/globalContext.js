@@ -1,41 +1,61 @@
-"use client"
-import { createContext, useContext, useEffect, useState } from "react";
+"use client";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 const GlobalContext = createContext();
 const GlobalContextUpdate = createContext();
 
 export const GlobalContextProvider = ({ children }) => {
-  const [forecast, setForecast] = useState({}); // Initialize forecast as an empty object
+  const [forecast, setForecast] = useState({});
+  const [airQuality, setAirQuality] = useState({});
+  const [fiveDayForecast, setFiveDayForecast] = useState({});
 
   const fetchForecast = async () => {
     try {
-      // Set latitude and longitude for Berlin as default values
       const params = { lat: 52.52, lon: 13.405 };
-
       const res = await axios.get("/api/weather", { params });
-      console.log("API response in context:", res.data);
-
       setForecast(res.data);
     } catch (error) {
-      console.log("Error fetching data:", error.message);
+      console.log("Error fetching weather data:", error.message);
+    }
+  };
+
+  const fetchAirQuality = async () => {
+    try {
+      const params = { lat: 52.52, lon: 13.405 };
+      const res = await axios.get("/api/pollution", { params });
+      setAirQuality(res.data);
+    } catch (error) {
+      console.log("Error fetching air quality data: ", error.message);
+    }
+  };
+
+  const fetchFiveDayForecast = async () => {
+    try {
+      const params = { lat: 52.52, lon: 13.405 };
+      const res = await axios.get("/api/fiveday", { params });
+      setFiveDayForecast(res.data);
+    } catch (error) {
+      console.log("Error fetching five-day forecast data: ", error.message);
     }
   };
 
   useEffect(() => {
     fetchForecast();
+    fetchAirQuality();
+    fetchFiveDayForecast();
   }, []);
 
-  console.log("Forecast data in context:", forecast); // Add this log to check context state
 
   return (
-    <GlobalContext.Provider value={forecast}>
-      <GlobalContextUpdate.Provider value={setForecast}>
+    <GlobalContext.Provider value={( forecast, airQuality, fiveDayForecast) }>
+      <GlobalContextUpdate.Provider >
         {children}
       </GlobalContextUpdate.Provider>
     </GlobalContext.Provider>
   );
 };
 
+// Custom hooks to use the context values
 export const useGlobalContext = () => useContext(GlobalContext);
 export const useGlobalContextUpdate = () => useContext(GlobalContextUpdate);
