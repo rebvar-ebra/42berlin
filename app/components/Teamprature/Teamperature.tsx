@@ -15,7 +15,7 @@ import { kelvinToCelsius } from "@/app/utils/Misc";
 import moment from "moment";
 
 export default function Temperature() {
-  const forecast = useGlobalContext(); // Get the forecast data from context
+  const {forecast} = useGlobalContext(); // Get the forecast data from context
 
   // Log the forecast data for debugging
   console.log("Forecast data:", forecast);

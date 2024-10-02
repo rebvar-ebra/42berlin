@@ -8,7 +8,7 @@ import { airQualityIndexText } from "@/app/utils/Misc";
 import { Progress } from "@/components/ui/progress";
 
 export default function AirPollution() {
-  const airQuality = useGlobalContext();
+  const {airQuality} = useGlobalContext();
 
   // Debugging: Log the air quality data
   console.log("Air Quality Data:", airQuality);
