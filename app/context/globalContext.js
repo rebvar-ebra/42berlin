@@ -12,7 +12,7 @@ export const GlobalContextProvider = ({ children }) => {
 
   const fetchForecast = async () => {
     try {
-      const params = { lat: 52.52, lon: 13.405 };
+      const params = { lat: 52.52, lon: 13.405 }; // You can replace these with dynamic values
       const res = await axios.get("/api/weather", { params });
       setForecast(res.data);
     } catch (error) {
@@ -22,7 +22,7 @@ export const GlobalContextProvider = ({ children }) => {
 
   const fetchAirQuality = async () => {
     try {
-      const params = { lat: 52.52, lon: 13.405 };
+      const params = { lat: 52.52, lon: 13.405 }; // You can replace these with dynamic values
       const res = await axios.get("/api/pollution", { params });
       setAirQuality(res.data);
     } catch (error) {
@@ -32,7 +32,7 @@ export const GlobalContextProvider = ({ children }) => {
 
   const fetchFiveDayForecast = async () => {
     try {
-      const params = { lat: 52.52, lon: 13.405 };
+      const params = { lat: 52.52, lon: 13.405 }; // You can replace these with dynamic values
       const res = await axios.get("/api/fiveday", { params });
       setFiveDayForecast(res.data);
     } catch (error) {
@@ -46,10 +46,10 @@ export const GlobalContextProvider = ({ children }) => {
     fetchFiveDayForecast();
   }, []);
 
-
+  // Return the state and set functions properly
   return (
-    <GlobalContext.Provider value={( forecast, airQuality, fiveDayForecast) }>
-      <GlobalContextUpdate.Provider >
+    <GlobalContext.Provider value={{ forecast, airQuality, fiveDayForecast }}>
+      <GlobalContextUpdate.Provider value={{ setForecast, setAirQuality, setFiveDayForecast }}>
         {children}
       </GlobalContextUpdate.Provider>
     </GlobalContext.Provider>
