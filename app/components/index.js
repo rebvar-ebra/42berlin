@@ -6,5 +6,9 @@ export { default as Mapbox } from "./Mapbox/Mapbox";
 export { default as Sunset } from "./Sunset/Sunset";
 export { default as Wind } from "./Wind/Wind";
 export { default as DailyForecast } from "./DailyForecast/DailyForecast";
+export { default as Population } from "./Population/Population";
+export { default as FeelsLike } from "./FeelsLike/FeelsLike";
+
+
 
 
