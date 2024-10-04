@@ -9,16 +9,12 @@ function Wind() {
   // Fetch the forecast data from global context
   const { forecast } = useGlobalContext();
 
-  // Debugging: Log the forecast data to see if `wind` is defined
-  console.log("Forecast Data in Wind Component:", forecast);
-
   // Extract wind speed and direction values from forecast
   const windSpeed = forecast?.wind?.speed;
   const windDir = forecast?.wind?.deg;
 
   // Check if windSpeed and windDir are valid (use typeof to account for 0 values)
   if (typeof windSpeed === "undefined" || typeof windDir === "undefined") {
-    console.warn("Wind data is missing or incomplete.");
     return <Skeleton className="h-[12rem] w-full" />;
   }
 

@@ -7,28 +7,19 @@ import { sunset } from "@/app/utils/Icons";
 import { unixToTime } from "@/app/utils/Misc";
 
 export default function Sunset() {
-  // Destructure forecast object from global context
   const { forecast } = useGlobalContext();
-
-  // Debugging: Log the forecast data to ensure correct values
-  console.log("Forecast Data:", forecast);
-
-  // Check if forecast, forecast.sys, and forecast.sys.sunset/sunrise exist
   if (
     !forecast ||
     !forecast.sys ||
     typeof forecast.sys.sunset === "undefined" ||
     typeof forecast.sys.sunrise === "undefined"
   ) {
-    console.warn("Incomplete or missing forecast data.");
     return <Skeleton className="h-[12rem] w-full" />;
   }
 
-  // Destructure required properties
   const { sunset: sunsetTime, sunrise: sunriseTime } = forecast.sys;
   const { timezone } = forecast;
 
-  // Convert Unix timestamps to formatted local times
   const sunsetFormatted = unixToTime(sunsetTime, timezone);
   const sunriseFormatted = unixToTime(sunriseTime, timezone);
 

@@ -7,8 +7,6 @@ import { formatNumber } from "@/app/utils/Misc";
 
 export default function Population() {
   const { fiveDayForecast } = useGlobalContext();
-  console.log(fiveDayForecast); // Check if it’s defined
-
   const { city } = fiveDayForecast;
 
   if (!city || !fiveDayForecast) {
@@ -25,7 +23,10 @@ export default function Population() {
         </h2>
         <p className="pt-4 text-2xl ">{formatNumber(city.population)}</p>
       </div>
-      <p className="text-sm">Latest UN population data for <span className="text-red-500 text-2xl">{city.name}</span></p>
+      <p className="text-sm">
+        Latest UN population data for{" "}
+        <span className="text-red-500 text-2xl">{city.name}</span>
+      </p>
     </div>
   );
 }

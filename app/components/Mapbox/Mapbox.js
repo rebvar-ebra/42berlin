@@ -14,8 +14,6 @@ function FlyToActiveCity({ activeCityCords }) {
       const flyToOptions = {
         duration: 1.5,
       };
-
-      console.log("Flying to coordinates:", activeCityCords);
       map.flyTo([activeCityCords.lat, activeCityCords.lon], zoomLev, flyToOptions);
     }
   }, [activeCityCords, map]);

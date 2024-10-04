@@ -1,27 +1,59 @@
 "use client";
 
+import React, { useState, useEffect, useMemo } from "react";
+import moment from "moment";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalContext } from "@/app/context/globalContext";
-import React, { useState, useEffect, useMemo } from "react";
-import {
-  clearSky,
-  cloudy,
-  drizzleIcon,
-  navigation,
-  rain,
-  snow,
-} from "@/app/utils/Icons";
 import { kelvinToCelsius } from "@/app/utils/Misc";
-import moment from "moment";
+import { clearSky, cloudy, drizzleIcon, navigation, rain, snow } from "@/app/utils/Icons";
 
 export default function Temperature() {
-  const {forecast} = useGlobalContext(); // Get the forecast data from context
+  const { forecast } = useGlobalContext(); // Hook 1: Always call hooks at the top
 
-  // Log the forecast data for debugging
-  console.log("Forecast data:", forecast);
+  // Define states and memoized values outside conditionals to avoid hook order issues
+  const [timeData, setTimeData] = useState({ localTime: "", currentDay: "" });
 
-  // Check for forecast data
-  if (!forecast || Object.keys(forecast).length === 0) {
+  // Memoize temperature calculations to avoid recalculations
+  const temperatures = useMemo(
+    () => ({
+      temp: forecast ? kelvinToCelsius(forecast.main?.temp) : null,
+      minTemp: forecast ? kelvinToCelsius(forecast.main?.temp_min) : null,
+      maxTemp: forecast ? kelvinToCelsius(forecast.main?.temp_max) : null,
+    }),
+    [forecast]
+  );
+
+  // Extract necessary forecast data for readability
+  const { main, timezone, name, weather } = forecast || {};
+
+  // Update local time based on the timezone, if available
+  useEffect(() => {
+    if (!timezone) return;
+
+    const interval = setInterval(() => {
+      const localMoment = moment().utcOffset(timezone / 60);
+      setTimeData({
+        localTime: localMoment.format("HH:mm:ss"),
+        currentDay: localMoment.format("dddd"),
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timezone]);
+
+  // Map weather condition to the corresponding icon
+  const weatherIconMap: { [key: string]: JSX.Element } = {
+    Drizzle: drizzleIcon,
+    Rain: rain,
+    Snow: snow,
+    Clear: clearSky,
+    Clouds: cloudy,
+  };
+
+  const weatherIcon = weather && weather[0] ? weatherIconMap[weather[0].main] || clearSky : clearSky;
+
+  // Loading state display
+  if (!forecast || !main || !weather || weather.length === 0) {
     return (
       <div className="flex items-center space-x-4">
         <Skeleton className="h-12 w-12 rounded-full" />
@@ -33,78 +65,29 @@ export default function Temperature() {
     );
   }
 
-  // Destructure forecast data
-  const { main, timezone, name, weather } = forecast;
-
-  // Check for necessary data
-  if (!main || !weather || weather.length === 0) {
-    return <div>Error: Missing weather data</div>; // Fallback if necessary data is not available
-  }
-
-  // Memoize temperature conversions
-  const temp = useMemo(() => kelvinToCelsius(main.temp), [main.temp]);
-  const minTemp = useMemo(() => kelvinToCelsius(main.temp_min), [main.temp_min]);
-  const maxTemp = useMemo(() => kelvinToCelsius(main.temp_max), [main.temp_max]);
-
-  const [localTime, setLocalTime] = useState<string>("");
-  const [currentDay, setCurrentDay] = useState<string>("");
-
-  // Use effect for local time update
-  useEffect(() => {
-    if (!timezone) return;
-
-    const interval = setInterval(() => {
-      const localMoment = moment().utcOffset(timezone / 60);
-      setLocalTime(localMoment.format("HH:mm:ss"));
-      setCurrentDay(localMoment.format("dddd"));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timezone]);
-
-  // Memoize the weather icon calculation
-  const icon = useMemo(() => {
-    if (!weather || weather.length === 0) return clearSky; // Default icon
-    const { main: weatherMain } = weather[0];
-    switch (weatherMain) {
-      case "Drizzle":
-        return drizzleIcon;
-      case "Rain":
-        return rain;
-      case "Snow":
-        return snow;
-      case "Clear":
-        return clearSky;
-      case "Clouds":
-        return cloudy;
-      default:
-        return clearSky;
-    }
-  }, [weather]);
-
   return (
     <div
       className="pt-6 pb-5 px-4 border rounded-lg flex flex-col
       justify-between dark:bg-dark-grey shadow-sm dark:shadow-none"
     >
       <p className="flex justify-between items-center">
-        <span className="font-medium">{currentDay}</span>
-        <span className="font-medium">{localTime}</span>
+        <span className="font-medium">{timeData.currentDay}</span>
+        <span className="font-medium">{timeData.localTime}</span>
       </p>
-      <p className="pt-2 font-bold flex gap-1">
+      <p className="pt-2 font-bold flex gap-1 items-center">
         <span>{name}</span>
         <span>{navigation}</span>
       </p>
-      <p className="py-10 text-9xl font-bold self-center">{temp}°</p>
+      <p className="py-10 text-9xl font-bold self-center">{temperatures.temp}°</p>
 
       <div>
-        <div>
-          <span>{icon}</span>
+        <div className="flex items-center gap-2">
+          <span>{weatherIcon}</span>
           <p className="pt-2 capitalize text-lg font-medium">{weather[0].description}</p>
         </div>
         <p className="flex items-center gap-2">
-          <span>Low: {minTemp}°</span>
-          <span>High: {maxTemp}°</span>
+          <span>Low: {temperatures.minTemp}°</span>
+          <span>High: {temperatures.maxTemp}°</span>
         </p>
       </div>
     </div>
