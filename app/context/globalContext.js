@@ -5,9 +5,8 @@ import axios from "axios";
 import defaultStates from "@/app/utils/defaultStates"; // Adjust this import based on your project structure
 import { debounce } from "lodash";
 
-// Create contexts
+// Create a single global context
 const GlobalContext = createContext();
-const GlobalContextUpdate = createContext();
 
 // Global Context Provider
 export const GlobalContextProvider = ({ children }) => {
@@ -111,14 +110,12 @@ export const GlobalContextProvider = ({ children }) => {
         setActiveCityCoords,
       }}
     >
-      <GlobalContextUpdate.Provider value={{ setActiveCityCoords }}>
-        {children}
-      </GlobalContextUpdate.Provider>
+      {children}
     </GlobalContext.Provider>
   );
 };
 
-// Custom hooks to use the context values
+// Custom hook to use the global context
 export const useGlobalContext = () => {
   const context = useContext(GlobalContext);
   if (!context) {
@@ -127,10 +124,3 @@ export const useGlobalContext = () => {
   return context;
 };
 
-export const useGlobalContextUpdate = () => {
-  const context = useContext(GlobalContextUpdate);
-  if (!context) {
-    throw new Error("useGlobalContextUpdate must be used within a GlobalContextProvider");
-  }
-  return context;
-};

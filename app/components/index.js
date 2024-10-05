@@ -8,7 +8,6 @@ export { default as Wind } from "./Wind/Wind";
 export { default as DailyForecast } from "./DailyForecast/DailyForecast";
 export { default as Population } from "./Population/Population";
 export { default as FeelsLike } from "./FeelsLike/FeelsLike";
-
-
-
+export { default as Humidity } from "./Humidity/Humidity";
+export { default as CityList } from "./CityList/CityList";
 
