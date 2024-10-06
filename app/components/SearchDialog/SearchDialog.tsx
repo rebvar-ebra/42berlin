@@ -1,18 +1,17 @@
 "use client";
 import React from "react";
-import {
-  useGlobalContext} from "@/app/context/globalContext";
+import { useGlobalContext } from "@/app/context/globalContext";
 import { commandIcon } from "@/app/utils/Icons";
 import { Button } from "@/components/ui/button";
 import { Command, CommandInput } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 function SearchDialog() {
-  const { geoCodedList, inputValue, handleInput } = useGlobalContext();
+  const { geoCodedList = [], inputValue, handleInput } = useGlobalContext(); // Default to empty array
   const { setActiveCityCoords } = useGlobalContext();
-  const [hoveredIndex, setHoveredIndex] = React.useState(0);
+  const [hoveredIndex, setHoveredIndex] = React.useState<number>(0);
 
-  const getClickedCoords = (lat, lon) => {
+  const getClickedCoords = (lat: number, lon: number) => {
     setActiveCityCoords([lat, lon]);
   };
 
@@ -36,16 +35,27 @@ function SearchDialog() {
           <Command className="rounded-lg border shadow-md">
             <CommandInput
               value={inputValue}
-              onChange={handleInput} // Change this to onChange
+              onChangeCapture={handleInput} // Capture phase handler
               placeholder="Type a command or search..."
             />
             <ul className="px-3 pb-2">
               <p className="p-2 text-sm text-muted-foreground">Suggestions</p>
 
-              {geoCodedList?.length === 0 && <p>No Results</p>}
+              {/* Display a "No Results" message when geoCodedList is empty */}
+              {geoCodedList.length === 0 && <p>No Results</p>}
 
-              {geoCodedList &&
-                geoCodedList.map((item, index) => {
+              {/* Safely iterate over geoCodedList */}
+              {geoCodedList.map(
+                (
+                  item: {
+                    name: string;
+                    country: string;
+                    state: string;
+                    lat: number;
+                    lon: number;
+                  },
+                  index: number
+                ) => {
                   const { country, state, name, lat, lon } = item;
                   return (
                     <li
@@ -63,7 +73,8 @@ function SearchDialog() {
                       </p>
                     </li>
                   );
-                })}
+                }
+              )}
             </ul>
           </Command>
         </DialogContent>
