@@ -10,4 +10,6 @@ export { default as Population } from "./Population/Population";
 export { default as FeelsLike } from "./FeelsLike/FeelsLike";
 export { default as Humidity } from "./Humidity/Humidity";
 export { default as CityList } from "./CityList/CityList";
+export { default as UvIndex } from "./UvIndex/UvIndex";
+
 

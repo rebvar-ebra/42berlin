@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Navbar,
   Teamperature,
@@ -10,7 +10,9 @@ import {
   DailyForecast,
   Population,
   FeelsLike,
-  Humidity,CityList
+  Humidity,
+  CityList,
+  UvIndex,
 } from "./components/index";
 import { useGlobalContext } from "./context/globalContext";
 import { useState } from "react";
@@ -57,6 +59,7 @@ export default function Home() {
             <Population />
             <FeelsLike />
             <Humidity />
+            <UvIndex />
           </div>
           <div className="mapbox-con mt-4 flex gap-4">
             <Mapbox />
